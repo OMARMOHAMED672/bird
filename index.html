@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird Clone</title>
+    <style>  
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { display: flex; justify-content: center; align-items: center; height: 100vh; background: skyblue; overflow: hidden; }
+        .game-container { 
+            position: relative; 
+            width: 100vw; 
+            height: 100vh; 
+            overflow: hidden; 
+            background: url('background_and_road.png') repeat-x; 
+            background-size: cover; 
+        }
+        .bird { 
+            position: absolute; 
+            width: 50px; 
+            height: 50px; 
+            left: 20vw; 
+            top: 50%; 
+            transform: translateY(-50%); 
+            background: url('WIN_20240511_17_58_53_Pro.jpg') no-repeat center/contain;
+        }
+        .pipe { 
+            position: absolute; 
+            width: 80px; 
+            background: green; 
+        }
+        .pipe.top { top: 0; }
+        .pipe.bottom { bottom: 0; }
+        .game-over-screen { 
+            display: none; 
+            position: absolute; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            background: rgba(0, 0, 0, 0.8); 
+            color: white; 
+            padding: 20px; 
+            text-align: center; 
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container" onclick="jump()">
+        <div class="bird" id="bird"></div>
+    </div>
+    <div class="game-over-screen" id="gameOverScreen">
+        <h1>Game Over!</h1>
+        <button onclick="restartGame()">Retry</button>
+    </div>
+    <script>
+        let bird = document.getElementById('bird');
+        let gameContainer = document.querySelector('.game-container');
+        let gameOverScreen = document.getElementById('gameOverScreen');
+        let birdY = window.innerHeight / 2;
+        let gravity = 0.4;
+        let velocity = 0;
+        let pipes = [];
+        let pipeSpeed = 3;
+        let isGameOver = false;
+        let pipeInterval;
+
+        function jump() {
+            if (!isGameOver) velocity = -8;
+        }
+
+        function updateGame() {
+            if (isGameOver) return;
+
+            velocity += gravity;
+            birdY += velocity;
+            bird.style.top = birdY + 'px';
+
+            if (birdY > window.innerHeight - 50 || birdY < 0) {
+                gameOver();
+            }
+
+            pipes.forEach(pipe => {
+                pipe.style.left = (parseInt(pipe.style.left) - pipeSpeed) + 'px';
+
+                let birdRect = bird.getBoundingClientRect();
+                let pipeRect = pipe.getBoundingClientRect();
+                
+                if (
+                    birdRect.left < pipeRect.left + pipeRect.width &&
+                    birdRect.left + birdRect.width > pipeRect.left &&
+                    birdRect.top < pipeRect.top + pipeRect.height &&
+                    birdRect.top + birdRect.height > pipeRect.top
+                ) {
+                    gameOver();
+                }
+            });
+            pipes = pipes.filter(pipe => parseInt(pipe.style.left) >= -80);
+        }
+
+        function gameOver() {
+            isGameOver = true;
+            gameOverScreen.style.display = 'block';
+            clearInterval(pipeInterval);
+        }
+
+        function restartGame() {
+            location.reload();
+        }
+
+        function createPipe() {
+            if (isGameOver) return;
+
+            let pipeHeight = Math.floor(Math.random() * (window.innerHeight / 2)) + 50;
+            let gap = 140;
+            let spawnPosition = window.innerWidth;
+
+            let topPipe = document.createElement('div');
+            topPipe.classList.add('pipe', 'top');
+            topPipe.style.left = spawnPosition + 'px';
+            topPipe.style.height = pipeHeight + 'px';
+
+            let bottomPipe = document.createElement('div');
+            bottomPipe.classList.add('pipe', 'bottom');
+            bottomPipe.style.left = spawnPosition + 'px';
+            bottomPipe.style.height = (window.innerHeight - pipeHeight - gap) + 'px';
+            bottomPipe.style.top = (pipeHeight + gap) + 'px';
+
+            gameContainer.appendChild(topPipe);
+            gameContainer.appendChild(bottomPipe);
+            pipes.push(topPipe);
+            pipes.push(bottomPipe);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') jump();
+        });
+
+        setInterval(updateGame, 20);
+        pipeInterval = setInterval(createPipe, 1800);
+    </script>
+</body>
+</html>
