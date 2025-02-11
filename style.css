@@ -1,0 +1,71 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: skyblue;
+  overflow: hidden;
+}
+.game-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: url("background_and_road.png") repeat-x;
+  background-size: cover;
+}
+.bird {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  left: 20vw;
+  top: 100%;
+  transform: translateY(-50%);
+  background: url("WIN_20240511_17_58_53_Pro.jpg") no-repeat center/contain;
+  border-radius: 100%;
+}
+.pipe {
+  position: absolute;
+  width: 80px;
+  background: green;
+}
+.pipe.top {
+  top: 0;
+}
+.pipe.bottom {
+  bottom: 0;
+}
+.score {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+.message {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+.game-over-screen {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
