@@ -19,17 +19,20 @@
             position: absolute; 
             width: 50px; 
             height: 50px; 
+            border-radius: 50%; 
             left: 20vw; 
             top: 50%; 
             transform: translateY(-50%); 
-            background: url('WhatsApp Image 2025-02-11 at 19.20.07_8add32c5.jpg') no-repeat center/contain;
+            background: url('WhatsApp Image 2025-02-11 at 19.20.07_8add32c5.jpg'); 
         }
         .pipe { 
             position: absolute; 
             width: 80px; 
             background: green; 
         }
-        .pipe.top { top: 0; }
+        .pipe.top { 
+            top: 0; 
+        }
         .pipe.bottom { bottom: 0; }
         .game-over-screen { 
             display: none; 
@@ -112,7 +115,7 @@
 
             let pipeHeight = Math.floor(Math.random() * (window.innerHeight / 2)) + 50;
             let gap = 140;
-            let spawnPosition = window.innerWidth;
+            let spawnPosition = window.innerWidth + 100;
 
             let topPipe = document.createElement('div');
             topPipe.classList.add('pipe', 'top');
